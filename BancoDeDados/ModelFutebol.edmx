@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ModelFutebol.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelFutebolStoreContainer">
+    <EntitySet Name="TimeSet" EntityType="ModelFutebol.Store.TimeSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="JogadorSet" EntityType="ModelFutebol.Store.JogadorSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="TimeJogador" Association="ModelFutebol.Store.TimeJogador">
+      <End Role="Time" EntitySet="TimeSet" />
+      <End Role="Jogador" EntitySet="JogadorSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="TimeSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Fundacao" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="JogadorSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TimeId" Type="int" Nullable="false" />
+    <Property Name="Nome" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NumeroDaCamisa" Type="int" Nullable="false" />
+    <Property Name="DataNascimento" Type="datetime" Nullable="false" />
+  </EntityType>
+  <Association Name="TimeJogador">
+    <End Role="Time" Type="ModelFutebol.Store.TimeSet" Multiplicity="1" />
+    <End Role="Jogador" Type="ModelFutebol.Store.JogadorSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Time">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Jogador">
+        <PropertyRef Name="TimeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ModelFutebol" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ModelFutebolContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TimeSet" EntityType="ModelFutebol.Time" />
+          <EntitySet Name="JogadorSet" EntityType="ModelFutebol.Jogador" />
+          <AssociationSet Name="TimeJogador" Association="ModelFutebol.TimeJogador">
+            <End Role="Time" EntitySet="TimeSet" />
+            <End Role="Jogador" EntitySet="JogadorSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Time">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" />
+          <Property Name="Fundacao" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Jogadores" Relationship="ModelFutebol.TimeJogador" FromRole="Time" ToRole="Jogador" />
+        </EntityType>
+        <EntityType Name="Jogador">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Time" Relationship="ModelFutebol.TimeJogador" FromRole="Jogador" ToRole="Time" />
+          <Property Name="TimeId" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" />
+          <Property Name="NumeroDaCamisa" Type="Int32" Nullable="false" />
+          <Property Name="DataNascimento" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <Association Name="TimeJogador">
+          <End Type="ModelFutebol.Time" Role="Time" Multiplicity="1" />
+          <End Type="ModelFutebol.Jogador" Role="Jogador" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Time">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Jogador">
+              <PropertyRef Name="TimeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelFutebolStoreContainer" CdmEntityContainer="ModelFutebolContainer">
+    <EntitySetMapping Name="TimeSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFutebol.Time)">
+        <MappingFragment StoreEntitySet="TimeSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+          <ScalarProperty Name="Fundacao" ColumnName="Fundacao" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JogadorSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFutebol.Jogador)">
+        <MappingFragment StoreEntitySet="JogadorSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TimeId" ColumnName="TimeId" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+          <ScalarProperty Name="NumeroDaCamisa" ColumnName="NumeroDaCamisa" />
+          <ScalarProperty Name="DataNascimento" ColumnName="DataNascimento" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
